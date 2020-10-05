@@ -47,13 +47,6 @@ jobs:
           brew install gnu-tar
           echo "/usr/local/opt/gnu-tar/libexec/gnubin" >> $GITHUB_PATH
 
-      # Somehow on Linux actions/cache doesn't cache without this setup
-      - name: Creating cargo cached dirs
-        if: runner.os == 'Linux'
-        run: |
-          mkdir -p ~/.cargo
-        shell: bash
-
       # Cache the global cargo directory, but NOT the local `target` directory which
       # we cannot reuse anyway when the nightly changes (and it grows quite large
       # over time).
