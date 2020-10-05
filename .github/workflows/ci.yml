@@ -61,9 +61,12 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.cargo
-          key: ${{ runner.os }}-global-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-global-cargo
+            # to avoid saving rustup proxy, save xargo and RTIM in separate dir.
+            ~/.cargo/ci
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo
 
       # We use the "stable" toolchain for better caching, it is just used to build `rustup-toolchain-install-master`.
       # But we also need to take into account that the build cache might have a different, outdated default.
@@ -112,13 +115,10 @@ jobs:
         if: false
         run: bash ./ci.sh
 
+      # Don't cache "master" toolchain, it's a waste.
       - name: Before caching
         run: |
-          # Don't cache "master" toolchain, it's a waste.
-          rustup default stable
-          rustup toolchain uninstall master
           # Binary artifacts is saved in `ci/bin` dir.
-          rm -rf ~/.cargo/bin
           strip ~/.cargo/ci/bin/*
         shell: bash
 
