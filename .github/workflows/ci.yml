@@ -62,8 +62,8 @@ jobs:
         with:
           path: |
             ~/.cargo
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo
+          key: ${{ runner.os }}-global-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-global-cargo
 
       # We use the "stable" toolchain for better caching, it is just used to build `rustup-toolchain-install-master`.
       # But we also need to take into account that the build cache might have a different, outdated default.
